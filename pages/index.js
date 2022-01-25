@@ -1,7 +1,6 @@
 import {Box, Button, Text, TextField, Image} from '@skynexui/components'
 import appConfig from '../config.json'
 
-
 function GlobalStyle() {
     return (
       <style global jsx>{`
@@ -47,23 +46,6 @@ function Titulo(props) {
         </>
     );
 }
-
-// // Componente REACT
-// function HomePage() {
-//     // JSX
-//     return (
-    
-//     <div>
-//         <GlobalStyle />
-//         <Titulo tag="span">Boas vindas de volta!</Titulo>
-//         <h2>Discord - Alura Matrix</h2>
-       
-//     </div>
-    
-//     )
-//   }  
-//  export default HomePage
-
 export default function PaginaInicial() {
     const username = 'rafaeldiastd';
   
@@ -101,7 +83,7 @@ export default function PaginaInicial() {
                 width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
               }}
             >
-              <Titulo tag="h2">Boas vindas de volta!</Titulo>
+              <Titulo tag="h2">Bem-vindo de volta!</Titulo>
               <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
                 {appConfig.name}
               </Text>
