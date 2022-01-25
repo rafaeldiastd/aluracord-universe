@@ -1,5 +1,6 @@
 {
-    "name": "Aluracord - Universo de todas as galáxias",
+    "projectname": "Aluracord - Universe",
+    "projectsub": "Entre no espaço da empresa",
     "theme": {
       "colors": {
         "primary": {
@@ -8,8 +9,8 @@
           "200": "#A3D9A5",
           "300": "#7BC47F",
           "400": "#57AE5B",
-          "500": "#3F9142",
-          "600": "#2F8132",
+          "500": "#F79596",
+          "600": "#34D4BA",
           "700": "#207227",
           "800": "#0E5814",
           "900": "#05400A"
