@@ -1,35 +1,8 @@
 import {Box, Button, Text, TextField, Image} from '@skynexui/components'
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import appConfig from '../config.json'
-
-
-function GlobalStyle() {
-    return (
-      <style global jsx>{`
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-          list-style: none;
-        }
-        body {
-          font-family: 'Open Sans', sans-serif;
-        }
-        /* App fit Height */ 
-        html, body, #__next {
-          min-height: 100vh;
-          display: flex;
-          flex: 1;
-        }
-        #__next {
-          flex: 1;
-        }
-        #__next > * {
-          flex: 1;
-        }
-        /* ./App fit Height */ 
-      `}</style>
-    );
-  }
 
 
 function Titulo(props) {
@@ -47,12 +20,15 @@ function Titulo(props) {
         </>
     );
 }
+
 export default function PaginaInicial() {
-    const username = 'rafaeldiastd';
   
-    return (
-      <>
-        <GlobalStyle />
+  const [username, setUsername] = React.useState('rafaeldiastd'); // Define a variavel username usando react useState, que gera uma outra variavel chamada setUsername, essa variavel é uma array que recebe dois valores. o Antigo e o Novo.
+  const router = useRouter(); // Importei do next, uma funcao chamada useRouter e apliquei ela em uma variavel
+
+
+return (
+      <>    
         <Box
           styleSheet={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap',
@@ -64,20 +40,27 @@ export default function PaginaInicial() {
           <Box
             styleSheet={{
               display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
+              alignItems: 'center',              
+              justifyContent: 'space-evenly',
               flexDirection: {
                 xs: 'column',
                 sm: 'row',
               },
               width: '800px', maxWidth: '700px',
-              borderRadius: '10px', padding: '32px', margin: '16px',
+              borderRadius: '10px', padding: '30px', margin: '16px',
               backgroundColor: appConfig.theme.colors.neutrals[700],
             }}
           >
             {/* Formulário */}
             <Box
               as="form"
+              onSubmit= { function (infosDoEvento) { // ao enviar, ele pega as informacoes do evento por um função
+                infosDoEvento.preventDefault(); // e diz pra esse evento, previnir o default
+                console.log('Alguem submeteu o form');
+                // window.location.href = '/chat';
+                router.push('/chat');
+              }}
+
               styleSheet={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
@@ -90,6 +73,14 @@ export default function PaginaInicial() {
   
               <TextField
                 fullWidth
+                value={username} // Valor da variavel
+                onChange= {
+                  function handler (event) { // Uma função de handler, que pega o que o usuário fez
+                  const valor = event.target.value; // Define uma variavel para armazenar o dado. O dado é, o valor do que foi alvo do evento. (no caso o clique na tecla)
+                  setUsername(valor); // Seta um novo valor para a Username
+  
+                  }
+                }
                 textFieldColors={{
                   neutral: {
                     textColor: appConfig.theme.colors.neutrals[200],
@@ -99,6 +90,8 @@ export default function PaginaInicial() {
                   },
                 }}
               />
+
+              
               <Button
                 type='submit'
                 label='Entrar'
@@ -147,6 +140,14 @@ export default function PaginaInicial() {
                 }}
               >
                 {username}
+              </Text>
+              <Text
+                variant="body4"
+                styleSheet={{
+                  color: appConfig.theme.colors.neutrals[200],
+                  paddingTop: "15px",
+                }}
+              >
               </Text>
             </Box>
             {/* Photo Area */}
