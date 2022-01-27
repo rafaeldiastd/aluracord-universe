@@ -22,7 +22,25 @@ function GlobalStyle() {
         #__next > * {
           flex: 1;
         }
+
         /* ./App fit Height */ 
+
+
+        ::-webkit-scrollbar {
+          width: 0.5em;
+        }
+        
+        /* Track */
+        ::-webkit-scrollbar-track {
+          background: #313D49;
+        }
+        
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+          background: #F79596;
+        }
+        
+
       `}</style>
     );
   }
@@ -36,3 +54,5 @@ export default function CustomApp({ Component, pageProps}) {
         </>)
     
 }
+
+

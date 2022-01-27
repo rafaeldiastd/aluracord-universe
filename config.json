@@ -2,6 +2,9 @@
     "projectname": "Aluracord - Universe",
     "projectsub": "Entre no espaço da empresa",
     "theme": {
+      "images": {
+        "bg": "url(https://i.imgur.com/FoqeLgz.jpg)"
+      },
       "colors": {
         "primary": {
           "050": "#E3F9E5",

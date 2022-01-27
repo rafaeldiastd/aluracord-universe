@@ -21,19 +21,32 @@ function Titulo(props) {
     );
 }
 
-export default function PaginaInicial() {
+export default function PaginaInicial() { 
+  const [username, setUsername] = React.useState(''); // Define a variavel username usando react useState, que gera uma outra variavel chamada setUsername, essa variavel é uma array que recebe dois valores. o Antigo e o Novo.
+  const router = useRouter(username); // Importei do next, uma funcao chamada useRouter e apliquei ela em uma variavel
   
-  const [username, setUsername] = React.useState('rafaeldiastd'); // Define a variavel username usando react useState, que gera uma outra variavel chamada setUsername, essa variavel é uma array que recebe dois valores. o Antigo e o Novo.
-  const router = useRouter(); // Importei do next, uma funcao chamada useRouter e apliquei ela em uma variavel
+  const [dadosDoGitHub, setDadosDoGitHub] = React.useState({});
+  
 
+  React.useEffect(() => {
+  fetch (`https://api.github.com/users/${username}`)
+  .then ((respostaDoGit) => {
+    return respostaDoGit.json();
+  })
+  .then ((respostaDoGitConvertida) => {
+    document.title = `Conversando como: ${username}` ;
+    setDadosDoGitHub(respostaDoGitConvertida);
+  })
+  }, [username]);
 
+  
 return (
       <>    
         <Box
           styleSheet={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap',
             backgroundColor: appConfig.theme.colors.primary[500],
-            backgroundImage: 'url(https://i.imgur.com/FoqeLgz.jpg)',
+            backgroundImage: appConfig.theme.images.bg,
             backgroundRepeat: 'no-repeat', backgroundSize: 'cover',
           }}
         >
@@ -128,26 +141,31 @@ return (
                   borderRadius: '50%',
                   marginBottom: '16px',
                 }}
-                src={`https://github.com/${username}.png`}
+                src={dadosDoGitHub.avatar_url}
               />
               <Text
-                variant="body4"
-                styleSheet={{
-                  color: appConfig.theme.colors.neutrals[200],
-                  backgroundColor: appConfig.theme.colors.neutrals["400"],
-                  padding: '3px 10px',
-                  borderRadius: '1000px'
-                }}
-              >
-                {username}
-              </Text>
+              variant="body4"
+              styleSheet={{
+                color: appConfig.theme.colors.neutrals[200],
+                backgroundColor: appConfig.theme.colors.neutrals["400"],
+                padding: '3px 10px',
+                borderRadius: '1000px'
+              }}
+            >
+           {dadosDoGitHub.login}
+            </Text>
               <Text
                 variant="body4"
                 styleSheet={{
                   color: appConfig.theme.colors.neutrals[200],
                   paddingTop: "15px",
+                  textAlign: "center"
                 }}
               >
+             
+              <p>{dadosDoGitHub.name}</p>
+              <p>{dadosDoGitHub.location}</p>
+                
               </Text>
             </Box>
             {/* Photo Area */}
@@ -174,7 +192,7 @@ return (
               </Text>
 
           </Box>
-          <Box  // Prefiro conversar por email
+          <Box  // ver as redes
             styleSheet={{
               display: 'flex',
               justifyContent: 'start',
@@ -185,7 +203,8 @@ return (
           >
           <Button
                 type='submit'
-                label='Prefiro conversar por e-mail'
+                label='Prefiro falar por e-mail'
+                
                 fullWidth
                 buttonColors={{
                   contrastColor: appConfig.theme.colors.neutrals["000"],
@@ -194,7 +213,6 @@ return (
                   mainColorStrong: appConfig.theme.colors.primary[600],
                 }}
               />
-
           </Box>
           </Box>
         </Box>
