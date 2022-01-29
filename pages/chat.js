@@ -177,7 +177,7 @@ function Header() {
             <Box 
             styleSheet={{ width: '100%', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} >
                 <Text variant='heading5'>
-                    {username}
+                    {mensagem.de}
                 </Text>
                 <Button
                     variant='tertiary'
