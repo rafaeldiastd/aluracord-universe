@@ -20,7 +20,7 @@ export default function ChatPage() {
             .select('*')
             .order('id', { ascending: false })
             .then(({ data }) => {
-                console.log('Dados da Consulta:', data);
+                console.log('Dados da Consulta: ', data);
                 setListaMensagem(data)
             });
     }, [])
@@ -36,7 +36,7 @@ export default function ChatPage() {
             .from('mensagens')
             .insert([mensagem])
             .then(({ data }) => {
-                console.log('criando mensagens', data)
+                console.log('criando mensagens ', data)
                 setListaMensagem([ // Altera a useState listaMensagem
                     data[0], // Incorpora a mensagem nova
                     ...listaMensagem, // Distribui a mensagem que já tinha
@@ -177,7 +177,7 @@ function Header() {
             <Box 
             styleSheet={{ width: '100%', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} >
                 <Text variant='heading5'>
-                    Chat
+                    {username}
                 </Text>
                 <Button
                     variant='tertiary'
