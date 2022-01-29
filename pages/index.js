@@ -1,6 +1,5 @@
 import {Box, Button, Text, TextField, Image} from '@skynexui/components'
 import React from 'react';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import appConfig from '../config.json'
 
@@ -34,11 +33,12 @@ export default function PaginaInicial() {
     return respostaDoGit.json();
   })
   .then ((respostaDoGitConvertida) => {
-    document.title = `Conversando como: ${username}` ;
     setDadosDoGitHub(respostaDoGitConvertida);
+    console.log(respostaDoGitConvertida.avatar_url)
   })
   }, [username]);
 
+  
   
 return (
       <>    
@@ -64,13 +64,10 @@ return (
               backgroundColor: appConfig.theme.colors.neutrals[700],
             }}
           >
-            {/* Formulário */}
             <Box
               as="form"
               onSubmit= { function (infosDoEvento) { // ao enviar, ele pega as informacoes do evento por um função
                 infosDoEvento.preventDefault(); // e diz pra esse evento, previnir o default
-                console.log('Alguem submeteu o form');
-                // window.location.href = '/chat';
                 router.push('/chat');
               }}
 

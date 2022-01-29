@@ -3,13 +3,16 @@ import React from 'react';
 import appConfig from '../config.json';
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzMwMzUxNiwiZXhwIjoxOTU4ODc5NTE2fQ.pewV4byi7rIDs7R4hL0eaXf_59xbwVEtDT9C0i2H1So';
-const SUPABASE_URL = 'https://lfhwfuprafqlfswhiegr.supabase.co';
-const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+const SUPABASE_URL_KEY = `https://${process.env.NEXT_PUBLIC_SUPABASE_URL_KEY}.supabase.co`;
+
 
 export default function ChatPage() {
+
     const [mensagem, setMensagem] = React.useState('');
-    const [listaMensagem, setListaMensagem] = React.useState([])
+    const [listaMensagem, setListaMensagem] = React.useState([]);
+    const supabaseClient = createClient(SUPABASE_URL_KEY, SUPABASE_KEY);
+
 
     React.useEffect(() => {
         supabaseClient
@@ -22,7 +25,6 @@ export default function ChatPage() {
             });
     }, [])
     
-
 
     function handleNovaMensagem(novaMensagem) {
         const mensagem = {
@@ -87,7 +89,7 @@ export default function ChatPage() {
                     }}
                 >
                     <MessageList // DIV DA LISTA DE MENSAGENS
-                        mensagens={listaMensagem} setMensagens={setListaMensagem} // DIV DO CHAT 
+                        mensagens={listaMensagem} setMensagens={setListaMensagem} 
                         onDelete={(id) => {
                             setListaMensagem(listaMensagem.filter((element) => {
                                 return element.id !== id
