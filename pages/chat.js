@@ -14,7 +14,6 @@ export default function ChatPage() {
     const usuarioLogado = router.query.username;
     const [mensagem, setMensagem] = React.useState('');
     const [listaMensagem, setListaMensagem] = React.useState([]);
-    const varTeste = "testandosabagassa"
 
     const supabaseClient = createClient(supabaseUrl, supabaseKey );
 

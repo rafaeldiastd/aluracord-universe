@@ -27,7 +27,6 @@ export default function PaginaInicial() {
   const router = useRouter(); // Importei do next, uma funcao chamada useRouter e apliquei ela em uma variavel
   const [dadosDoGitHub, setDadosDoGitHub] = useState({});
 
-  
 
   useEffect(() => {
   fetch (`https://api.github.com/users/${username}`)
