@@ -1,7 +1,8 @@
 import {Box, Button, Text, TextField, Image} from '@skynexui/components'
-import React from 'react';
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
-import appConfig from '../config.json'
+import appConfig from '../config.json';
+
 
 
 function Titulo(props) {
@@ -21,13 +22,14 @@ function Titulo(props) {
 }
 
 export default function PaginaInicial() { 
-  const [username, setUsername] = React.useState(''); // Define a variavel username usando react useState, que gera uma outra variavel chamada setUsername, essa variavel é uma array que recebe dois valores. o Antigo e o Novo.
-  const router = useRouter(username); // Importei do next, uma funcao chamada useRouter e apliquei ela em uma variavel
   
-  const [dadosDoGitHub, setDadosDoGitHub] = React.useState({});
+  const [username, setUsername] = useState(''); // Define a variavel username usando react useState, que gera uma outra variavel chamada setUsername, essa variavel é uma array que recebe dois valores. o Antigo e o Novo.
+  const router = useRouter(); // Importei do next, uma funcao chamada useRouter e apliquei ela em uma variavel
+  const [dadosDoGitHub, setDadosDoGitHub] = useState({});
+
   
 
-  React.useEffect(() => {
+  useEffect(() => {
   fetch (`https://api.github.com/users/${username}`)
   .then ((respostaDoGit) => {
     return respostaDoGit.json();
@@ -39,9 +41,11 @@ export default function PaginaInicial() {
   }, [username]);
 
   
+  const nomeuser = dadosDoGitHub.name;
   
 return (
-      <>    
+      <>
+          
         <Box
           styleSheet={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap',
@@ -50,6 +54,9 @@ return (
             backgroundRepeat: 'no-repeat', backgroundSize: 'cover',
           }}
         >
+
+          
+
           <Box
             styleSheet={{
               display: 'flex',
@@ -66,9 +73,9 @@ return (
           >
             <Box
               as="form"
-              onSubmit= { function (infosDoEvento) { // ao enviar, ele pega as informacoes do evento por um função
-                infosDoEvento.preventDefault(); // e diz pra esse evento, previnir o default
-                router.push('/chat');
+              onSubmit={(e) => {
+                e.preventDefault()
+                if(username.length >= 2){ router.push(`/chat?username=${username}&name=${nomeuser}`) }
               }}
 
               styleSheet={{

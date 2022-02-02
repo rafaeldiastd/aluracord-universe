@@ -49,7 +49,10 @@ export default function CustomApp({ Component, pageProps}) {
       return  (
         <>
             <GlobalStyle />
-            <Component { ...pageProps}/>
+            <Component { ...pageProps}
+            varTeste = "Teste"
+            
+            />
         </>)
     
 }

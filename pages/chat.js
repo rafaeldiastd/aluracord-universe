@@ -1,18 +1,22 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React from 'react';
 import appConfig from '../config.json';
-import { createClient } from '@supabase/supabase-js';
+import { useRouter } from 'next/router';
+import { createClient } from '@supabase/supabase-js'
 
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY;
-const SUPABASE_URL_KEY = `https://${process.env.NEXT_PUBLIC_SUPABASE_URL_KEY}.supabase.co`;
+const supabaseUrl = process.env.NEXT_PUBLIC_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_KEY;
 
 
 export default function ChatPage() {
 
+    const router = useRouter();
+    const usuarioLogado = router.query.username;
     const [mensagem, setMensagem] = React.useState('');
     const [listaMensagem, setListaMensagem] = React.useState([]);
-    const supabaseClient = createClient(SUPABASE_URL_KEY, SUPABASE_KEY);
+    const varTeste = "testandosabagassa"
 
+    const supabaseClient = createClient(supabaseUrl, supabaseKey );
 
     React.useEffect(() => {
         supabaseClient
@@ -20,15 +24,14 @@ export default function ChatPage() {
             .select('*')
             .order('id', { ascending: false })
             .then(({ data }) => {
-                console.log('Dados da Consulta: ', data);
-                setListaMensagem(data)
-            });
-    }, [])
-    
+                setListaMensagem(data);
+            })
+    });
+
 
     function handleNovaMensagem(novaMensagem) {
         const mensagem = {
-            de: 'rafaeldiastd',
+            de: usuarioLogado,
             texto: novaMensagem,
         };
 
@@ -36,18 +39,31 @@ export default function ChatPage() {
             .from('mensagens')
             .insert([mensagem])
             .then(({ data }) => {
-                console.log('criando mensagens ', data)
+                console.log('Criando mensagens ', data)
                 setListaMensagem([ // Altera a useState listaMensagem
                     data[0], // Incorpora a mensagem nova
                     ...listaMensagem, // Distribui a mensagem que já tinha
                 ]);
             });
-            setMensagem('') // Esvazia a useState Mensagem
+        setMensagem('') // Esvazia a useState Mensagem
+    }
+
+    function handleDeleteMessage(antigoId) {
+        supabaseClient
+            .from('mensagens')
+            .delete()
+            .match({ id: Number(antigoId) })
+            .then(({ data, error }) => {
+                console.log(error);
+            })
+        setListaMensagem((old) => {
+            return old.filter(item => item.id !== antigoId);
+        });
     }
 
     return (
-        
-        
+
+
         <Box  // DIV DO BODY
             styleSheet={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -57,6 +73,8 @@ export default function ChatPage() {
                 color: appConfig.theme.colors.neutrals['000']
             }}
         >
+
+       
 
             <Box // DIV QUE ENGLOBA O CHAT
                 styleSheet={{
@@ -72,10 +90,12 @@ export default function ChatPage() {
                     padding: '32px',
                 }}
             >
-
-                <Header // DIV DO CABEÇALHO - Sendo criada por uma function 
-                />  
                 
+
+                <Header // DIV DO CABEÇALHO - Sendo criada por uma function
+                />
+
+
                 <Box // DIV DO CHAT 
                     styleSheet={{
                         position: 'relative',
@@ -89,12 +109,7 @@ export default function ChatPage() {
                     }}
                 >
                     <MessageList // DIV DA LISTA DE MENSAGENS
-                        mensagens={listaMensagem} setMensagens={setListaMensagem} 
-                        onDelete={(id) => {
-                            setListaMensagem(listaMensagem.filter((element) => {
-                                return element.id !== id
-                            }))
-                        }} />
+                        mensagens={listaMensagem} setMensagens={setListaMensagem} onDelete={handleDeleteMessage} />
 
                     <Box
                         as="form"
@@ -122,7 +137,7 @@ export default function ChatPage() {
                                 }
                             }}
 
-                            placeholder="Insira sua mensagem aqui..."
+                            placeholder={`Insira sua mensagem aqui...`}
                             type="textarea"
                             styleSheet={{
                                 width: '90%',
@@ -172,18 +187,31 @@ export default function ChatPage() {
 }
 
 function Header() {
+    const router = useRouter();
+    const nomeUser = router.query.name;
+    const username = router.query.username;
+    const linkPerfil = `https://github.com/${username}`
     return (
         <>
-            <Box 
-            styleSheet={{ width: '100%', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} >
-                <Text variant='heading5'>
-                    Chat
-                </Text>
-                <Button
-                    variant='tertiary'
-                    colorVariant='neutral'
-                    label='Logout'
+            <Box styleSheet={{ display: 'flex', justifyContent: 'end' }}>
+                               <Button 
+                    iconName="times"
+                    colorVariant="dark"
+                    variant="secondary"
                     href="/"
+                    label="Sair"
+                    size="xs"
+                    styleSheet={{
+                        marginBottom: '20px',
+                        border: '0',
+                        fontSize: '12px',
+                        borderRadius: '10px',
+                        backgroundColor: appConfig.theme.colors.neutrals[800],
+                        color: appConfig.theme.colors.neutrals[200],hover: {
+                            backgroundColor: appConfig.theme.colors.neutrals["500"],
+                            color: appConfig.theme.colors.neutrals[200],
+                        }
+                    }}
                 />
             </Box>
         </>
@@ -192,7 +220,14 @@ function Header() {
 
 function MessageList(props) {
 
-
+    const router = useRouter();
+    const usuarioLogado = router.query.username;
+    const handleData = (data) => {
+        const novaData = new Date(data);
+        const dataAtual = new Date();
+        const dia = (dataAtual.toLocaleDateString() === novaData.toLocaleDateString()) ? 'Hoje' : novaData.toLocaleDateString();
+        return (`${dia} - ${novaData.toLocaleTimeString()}`)
+    }
     return (
         <Box
             tag="ul"
@@ -285,13 +320,20 @@ function MessageList(props) {
                                         color: appConfig.theme.colors.neutrals[300],
                                     }}
                                 >
-                                    {(new Date().toLocaleDateString())}
+                                    {handleData(mensagem.created_at)}
+
                                 </Text>
+
 
                                 <Button
 
+
                                     onClick={() => {
-                                        props.onDelete(mensagem.id)
+                                        if (usuarioLogado === mensagem.de) {
+                                            props.onDelete(mensagem.id)
+                                        } else {
+                                            alert("Você não pode deletar, essa mensagem não é sua.")
+                                        }
 
                                     }}
 
